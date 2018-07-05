@@ -42,23 +42,24 @@ void drawGrid(float size, float step){
 }
 
 void drawGround(){
-	glTranslatef(0,9.5,0);	
+	glTranslatef(0,-0.5,0);	
 	glColor3f(0.3, 0.3, 0.3);
-	glEnable ( GL_TEXTURE_3D );
-	glBindTexture ( GL_TEXTURE_3D, groundTex);
+	glEnable ( GL_TEXTURE_2D );
+	glBindTexture ( GL_TEXTURE_2D, groundTex);
+	//printf("GROUND[%d]\n",groundTex);
     glBegin(GL_QUADS);
-		//bl
-		glVertex3f(-4000.0,-100,10000.0);
-		//br
-		glVertex3f(4000.0,-100,10000.0);
-		//tr
-		glVertex3f(4000.0,80,-10000.0);
-		//tl
-		glVertex3f(-4000.0,80,-10000.0);
+		glTexCoord2f(0,0);
+		glVertex3f(-100.0f, 0.0f, -100.0f);
+		glTexCoord2f(100.0,0);
+		glVertex3f(-100.0f, 0.0f,  100.0f);
+		glTexCoord2f(100.0,100.0);
+		glVertex3f( 100.0f, 0.0f,  100.0f);
+		glTexCoord2f(0,100.0);
+		glVertex3f( 100.0f, 0.0f, -100.0f);
  
 	glEnd();
-	glDisable ( GL_TEXTURE_3D );
-	glTranslatef(0,-9.5,0);
+	glDisable ( GL_TEXTURE_2D );
+	glTranslatef(0,0.5,0);
 			
 }
 
@@ -164,7 +165,7 @@ void defaultInit(){
 	glEnable(GL_DEPTH_TEST);
 	//glEnable ( GL_TEXTURE_3D );
 	spider = Spider();
-	loadTexture("texture/ground.jpeg",&groundTex);
+	loadTexture2d("texture/ground.jpeg",&groundTex);
 
 
 
