@@ -14,32 +14,6 @@
 Spider spider;
 GLuint groundTex;
 
-/*
- * @param {float} size Define o tamanho da grade.
- * @param {float} step Especifica a quantidade de intervalos de grades, causando a impressão de pisos no chão.
- */
-
-void drawGrid(float size, float step){
-	float i;
-	glColor3f(0.3, 0.3, 0.3);
-	for(i = 0; i < size; i = i + step){
-		
-		glTranslatef(i, -0.5, 0.0);
-		glBegin(GL_LINES);
-			glVertex3f(0.0, -0.0, 0.0);
-			glVertex3f(0.0, -0.0, size);
-		glEnd();
-		glTranslatef(-i, 0.5, 0.0);
-		
-		glTranslatef(0.0, -0.5, i);
-		glBegin(GL_LINES);
-			glVertex3f(0.0, -0.0, 0.0);
-			glVertex3f(size, -0.0, 0.0);
-		glEnd();
-		glTranslatef(0.0, 0.5, -i);
-	}
-
-}
 
 void drawGround(){
 	glTranslatef(0,-0.5,0);	
@@ -79,7 +53,6 @@ void display(){
     glViewport(0, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(c.x, 5.0+c.y,c.z,c.x,c.y,c.z, 1.0, 0.0, 0.0);
-	//drawGrid(50, 0.7);
 	drawGround();
 	spider.draw();
 	glPopMatrix();
@@ -89,7 +62,6 @@ void display(){
     glViewport(WINDOW_WIDTH/2, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(5.0+c.x,c.y,c.z,c.x,c.y,c.z, 0.0, 1.0, 0.0);
-    //drawGrid(50, 0.7);
 	drawGround();
     spider.draw();
     glPopMatrix();
@@ -99,7 +71,6 @@ void display(){
     glViewport(0, WINDOW_HEIGHT/2, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(c.x, c.y, 5.0+c.z, c.x, c.y, c.z, 0.0, 1.0, 0.0);
-   	//drawGrid(50, 0.7);
 	drawGround();
     spider.draw();
     glPopMatrix();
@@ -109,7 +80,6 @@ void display(){
     glViewport(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(3.0+c.x, 2.0+c.y, 10.0+c.z, c.x, c.y, c.z, 1.0, 1.0, 1.0);
-    //drawGrid(50, 0.7);
 	drawGround();
     spider.draw();
     glPopMatrix();
