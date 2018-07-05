@@ -7,10 +7,12 @@
 //#include <Transformations.h>
 #include <math.h>
 #include <ilumination.h>
+#include <texture.h>
 
 //Point p;
 
-Spider spider = Spider();
+Spider spider;
+GLuint groundTex;
 
 /*
  * @param {float} size Define o tamanho da grade.
@@ -20,8 +22,7 @@ Spider spider = Spider();
 void drawGrid(float size, float step){
 	float i;
 	glColor3f(0.3, 0.3, 0.3);
-	for(i = 0; i < size; i = i + step)
-	{
+	for(i = 0; i < size; i = i + step){
 		
 		glTranslatef(i, -0.5, 0.0);
 		glBegin(GL_LINES);
@@ -40,6 +41,27 @@ void drawGrid(float size, float step){
 
 }
 
+void drawGround(){
+	glTranslatef(0,9.5,0);	
+	glColor3f(0.3, 0.3, 0.3);
+	glEnable ( GL_TEXTURE_3D );
+	glBindTexture ( GL_TEXTURE_3D, groundTex);
+    glBegin(GL_QUADS);
+		//bl
+		glVertex3f(-4000.0,-100,10000.0);
+		//br
+		glVertex3f(4000.0,-100,10000.0);
+		//tr
+		glVertex3f(4000.0,80,-10000.0);
+		//tl
+		glVertex3f(-4000.0,80,-10000.0);
+ 
+	glEnd();
+	glDisable ( GL_TEXTURE_3D );
+	glTranslatef(0,-9.5,0);
+			
+}
+
 // Display all drawings and atualizations on the screen
 void display(){
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -48,6 +70,7 @@ void display(){
     
     //ilumination();
 
+
     Point c = spider.getCephalo().c;
 	
     /* Tela esquerda de baixo Por cima em Y */
@@ -55,7 +78,8 @@ void display(){
     glViewport(0, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(c.x, 5.0+c.y,c.z,c.x,c.y,c.z, 1.0, 0.0, 0.0);
-	drawGrid(50, 0.7);
+	//drawGrid(50, 0.7);
+	drawGround();
 	spider.draw();
 	glPopMatrix();
 
@@ -64,7 +88,8 @@ void display(){
     glViewport(WINDOW_WIDTH/2, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(5.0+c.x,c.y,c.z,c.x,c.y,c.z, 0.0, 1.0, 0.0);
-    drawGrid(50, 0.7);
+    //drawGrid(50, 0.7);
+	drawGround();
     spider.draw();
     glPopMatrix();
 
@@ -73,7 +98,8 @@ void display(){
     glViewport(0, WINDOW_HEIGHT/2, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(c.x, c.y, 5.0+c.z, c.x, c.y, c.z, 0.0, 1.0, 0.0);
-   	drawGrid(50, 0.7);
+   	//drawGrid(50, 0.7);
+	drawGround();
     spider.draw();
     glPopMatrix();
 
@@ -82,7 +108,8 @@ void display(){
     glViewport(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(3.0+c.x, 2.0+c.y, 10.0+c.z, c.x, c.y, c.z, 1.0, 1.0, 1.0);
-    drawGrid(50, 0.7);
+    //drawGrid(50, 0.7);
+	drawGround();
     spider.draw();
     glPopMatrix();
 
@@ -124,11 +151,22 @@ void update(int val){
 void defaultInit(){
 	// Sets the color thar glClear will 'paint' in RGBA
 	glClearColor(1, 1, 1, 1);
+
+	
+	//glEnable(GL_TEXTURE_2D);
+
 	// Sets the matrix with projection wich will do alot of matrix operations
 	glMatrixMode(GL_PROJECTION); // signal that I want to work with the projection stack
 	glLoadIdentity(); // make sure that the projection stack doesn't already have anything on it
 	glMatrixMode(GL_MODELVIEW); // the rest of my app will only change MODELVIEW 
 	glLoadIdentity();	
+
+	glEnable(GL_DEPTH_TEST);
+	//glEnable ( GL_TEXTURE_3D );
+	spider = Spider();
+	loadTexture("texture/ground.jpeg",&groundTex);
+
+
 
 }
 
@@ -143,12 +181,14 @@ void reshape(int x, int y)
     glViewport(0,0,x,y);  //Use the whole window for rendering
 }
 
+
+
 int main(int argc, char *argv[]){
 
 	// Start up the glut	
 	glutInit(&argc, argv);
 	// Info for openGL about the screen/buffers
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); 
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH); 
 	// Getting device screen WINDOW_WIDTH and height
 	GLint screen_width = glutGet(GLUT_SCREEN_WIDTH), screen_height = glutGet(GLUT_SCREEN_HEIGHT);
 	// Centering the window
@@ -166,6 +206,8 @@ int main(int argc, char *argv[]){
 	glutTimerFunc(fps, update, 0);
 	
 	glutMainLoop();
+
+	spider.destroy();
 
 	return EXIT_SUCCESS;
 }

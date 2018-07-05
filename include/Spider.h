@@ -3,6 +3,7 @@
 
 #include <Transformations.h>
 #include <Geometrics.h>
+#include <GL/glut.h>
 
 typedef struct {
 	Point joint[3]; /* Leg has 3 joints */ 
@@ -15,6 +16,9 @@ class Spider{
 		// Body properties variables
 		Circle cephalo, abdomen;
 		Leg leftLeg[4], rightLeg[4];
+		GLUquadric *cephaloQuad,*abdomenQuad;
+		GLuint cephaloTex,abdomenTex;
+
 		// Spider Moviment variables
 		Vector direction;
 		float speed, angle, legSDir,legUpDir;
@@ -41,6 +45,7 @@ class Spider{
 		void move();
 		void turn(float);
 		void legsAnimation();
+		void destroy();
 		
 };
 

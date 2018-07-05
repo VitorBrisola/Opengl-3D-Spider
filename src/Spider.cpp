@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <math.h>
-#include <GL/glut.h>
+
 #include <limits.h>
 #include <string>
 #include <vector>
@@ -11,9 +11,9 @@
 #include <Spider.h>
 #include <T2.h>
 
+#include <texture.h>
 
 using namespace std;
-
 
 	/* Creates a random spyder, can be changed later */
 	Spider::Spider(){
@@ -21,6 +21,26 @@ using namespace std;
 			// cephalo initial position and size
 			cephalo.r = 0.25f;
 			
+
+			 
+			cephaloQuad = gluNewQuadric();
+			gluQuadricDrawStyle(cephaloQuad, GLU_FILL);
+			gluQuadricTexture( cephaloQuad, GL_TRUE);
+			gluQuadricNormals(cephaloQuad, GLU_SMOOTH);
+			abdomenQuad = gluNewQuadric();
+			gluQuadricDrawStyle(abdomenQuad, GLU_FILL);
+			gluQuadricTexture( abdomenQuad, GL_TRUE);
+			gluQuadricNormals(abdomenQuad, GLU_SMOOTH);
+			
+			printf("Comecando cephalo.. [%d]\n",cephaloTex);
+			loadTexture("texture/spiderHead.jpg",&cephaloTex);
+			printf("Finalizado![%d]\n",cephaloTex);
+			
+			printf("Comecando abdomen.. [%d]\n",abdomenTex);
+			loadTexture("texture/spiderBody.jpeg",&abdomenTex);
+			printf("Finalizado![%d]\n",abdomenTex);
+
+
 
 			// abdomen initial position and size relative to cephalo
 			abdomen.r = cephalo.r*2;
@@ -137,30 +157,33 @@ using namespace std;
 
 	// Desenha a aranha
 	void Spider::draw(){
-		// Red color used to draw.
-   		glColor3f(1, 0, 0);
-
 
 	    // Desenha abdomen no meio da tela
 
    		// Levar centro ate a posicao atual para rotacionar
    		glTranslatef(cephalo.c.x, cephalo.c.y, cephalo.c.z);
    		glRotatef(angle,0.0f,1.0f,0.0f);
-   		
-	    
+   	
+		
+		glEnable ( GL_TEXTURE_3D );
+	    glBindTexture ( GL_TEXTURE_3D, cephaloTex);
+		gluSphere(cephaloQuad,cephalo.r,100,100);	
+	  	glDisable ( GL_TEXTURE_3D );
+	
 
-		//glColor3f(0, 1, 0);
-
-		// Tranlada pra cima do abdomen e desenha o cephalotorax
-	    
-		glutSolidSphere(cephalo.r,100,100);	
-		//glColor3f(0,0,0);
+		glColor3f(0,0,0);
 		drawLegs();
 		
 
 		glTranslatef(abdomen.c.x, abdomen.c.y, abdomen.c.z);
-   		glutSolidSphere(abdomen.r,100,100);	
-   		glTranslatef((-1.0f)*abdomen.c.x, (-1.0f)*abdomen.c.y, (-1.0f)*abdomen.c.z);
+   		
+		//glutSolidSphere(abdomen.r,100,100);
+		glEnable ( GL_TEXTURE_3D );
+		glBindTexture ( GL_TEXTURE_3D, abdomenTex);
+		gluSphere(abdomenQuad,abdomen.r,100,100);
+		glDisable ( GL_TEXTURE_3D );
+   		
+		glTranslatef((-1.0f)*abdomen.c.x, (-1.0f)*abdomen.c.y, (-1.0f)*abdomen.c.z);
 
 		glRotatef((-1.0f)*angle,0.0f,1.0f,0.0f);
    		glTranslatef((-1.0f)*cephalo.c.x, (-1.0f)*cephalo.c.y, (-1.0f)*cephalo.c.z);
@@ -251,4 +274,13 @@ using namespace std;
 		angle += ang;
 
 	}
+
+	void Spider::destroy(){
+		free(cephaloQuad);
+		free(abdomenQuad);
+		FreeTexture( cephaloTex );
+	}
+
+
+	
 
