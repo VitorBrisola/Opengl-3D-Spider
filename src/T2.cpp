@@ -84,37 +84,32 @@ void display(){
     Point c = spider.getCephalo().c;
 	
     /* Tela esquerda de baixo Por cima em Y */
-    glPushMatrix();
+    /*glPushMatrix();
     glViewport(0, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(c.x, 5.0+c.y,c.z,c.x,c.y,c.z, 1.0, 0.0, 0.0);
 	//drawSky();
 	drawGround();
 	spider.draw();
-
-	
- 	
-
-
-	glPopMatrix();
+	glPopMatrix();*/
 
     /*Tela direita de baixo De frente por Z*/
-    glPushMatrix();
+    /*glPushMatrix();
     glViewport(WINDOW_WIDTH/2, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(5.0+c.x,c.y,c.z,c.x,c.y,c.z, 0.0, 1.0, 0.0);
 	//drawSky();
 	drawGround();
     spider.draw();
-	//glFogf(GL_FOG_COLOR,( 0.5, 0.5, 0.5, 1.0));
+	//glFogf(GL_FOG_COLOR,( 0.5, 0.5, 0.5, 1.0));*/
 
     glPopMatrix();
 
     /* Tela esquerda de cima Na de lado por X */ 
     glPushMatrix();
-    glViewport(0, WINDOW_HEIGHT/2, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
+    glViewport(0, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT);
     glLoadIdentity();
-    gluLookAt(c.x, c.y, 5.0+c.z, c.x, c.y, c.z, 0.0, 1.0, 0.0);
+    gluLookAt((-3.0)+c.x, 2.5+c.y, 5.0+c.z, c.x, c.y, c.z, 0.0, 1.0, 0.0);
 	//drawSky();
 	drawGround();
     spider.draw();
@@ -122,7 +117,7 @@ void display(){
 
     /* Tela direita de cima Aleatório */
     glPushMatrix();
-    glViewport(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
+    glViewport(WINDOW_WIDTH/2, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT);
     glLoadIdentity();
     gluLookAt(3.0+c.x, 2.0+c.y, 10.0+c.z, c.x, c.y, c.z, 1.0, 1.0, 1.0);
 	//drawSky();
