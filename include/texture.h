@@ -5,6 +5,7 @@
 
 void loadTexture(const char *,GLuint *);
 void loadTexture2d(const char *,GLuint *);
+void loadTextureCubeMap(const char *,GLuint *);
 void FreeTexture( GLuint );
 
 #endif

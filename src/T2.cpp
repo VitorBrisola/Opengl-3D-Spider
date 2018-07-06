@@ -12,23 +12,23 @@
 //Point p;
 
 Spider spider;
-GLuint groundTex;
+GLuint groundTex,skyTex;
 
 
 void drawGround(){
 	glTranslatef(0,-0.5,0);	
-	glColor3f(0.3, 0.3, 0.3);
+	//glColor3f(0.3, 0.3, 0.3);
 	glEnable ( GL_TEXTURE_2D );
 	glBindTexture ( GL_TEXTURE_2D, groundTex);
 	//printf("GROUND[%d]\n",groundTex);
     glBegin(GL_QUADS);
 		glTexCoord2f(0,0);
 		glVertex3f(-100.0f, 0.0f, -100.0f);
-		glTexCoord2f(100.0,0);
+		glTexCoord2f(50.0,0);
 		glVertex3f(-100.0f, 0.0f,  100.0f);
-		glTexCoord2f(100.0,100.0);
+		glTexCoord2f(50.0,50.0);
 		glVertex3f( 100.0f, 0.0f,  100.0f);
-		glTexCoord2f(0,100.0);
+		glTexCoord2f(0,50.0);
 		glVertex3f( 100.0f, 0.0f, -100.0f);
  
 	glEnd();
@@ -37,13 +37,48 @@ void drawGround(){
 			
 }
 
+void drawSky(){
+	float x = 100.0f;
+	glTranslatef(0,-0.5,0);	
+	glDepthMask(GL_FALSE);
+	glEnable ( GL_TEXTURE_CUBE_MAP );
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skyTex);
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(0,0);glVertex3f(-100.0f, 0.0f, -100.0f);
+	glTexCoord2f(x,0);glVertex3f(-100.0f, 0.0f,  100.0f);
+	glTexCoord2f(x,x);glVertex3f( -100.0f, 100.0f,  100.0f);
+	glTexCoord2f(0,x);glVertex3f( -100.0f, 100.0f, -100.0f);
+
+	glTexCoord2f(0,0);glVertex3f(-100.0f, 0.0f, 100.0f);
+    glTexCoord2f(x,0);glVertex3f(100.0f, 0.0f,  100.0f);
+    glTexCoord2f(x,x);glVertex3f( 100.0f, 100.0f,  100.0f);
+	glTexCoord2f(0,x);glVertex3f( -100.0f, 100.0f, 100.0f);
+
+	glTexCoord2f(0,0);glVertex3f(100.0f, 0.0f, 100.0f);
+	glTexCoord2f(x,0);glVertex3f(100.0f, 0.0f, -100.0f);
+	glTexCoord2f(x,x);glVertex3f( 100.0f, 100.0f,  -100.0f);
+	glTexCoord2f(0,x);glVertex3f( 100.0f, 100.0f, 100.0f);
+
+	glTexCoord2f(0,0);glVertex3f(10.0f, 0.0f, -10.0f);
+	glTexCoord2f(x,0);glVertex3f(-10.0f, 0.0f,  -10.0f);
+	glTexCoord2f(x,x);glVertex3f( -10.0f, 10.0f,  -10.0f);
+	glTexCoord2f(0,x);glVertex3f( 10.0f, 10.0f, -10.0f);
+
+
+	glEnd();
+	glDisable (GL_TEXTURE_CUBE_MAP);
+	glDepthMask(GL_TRUE);
+	glTranslatef(0,0.5,0);
+}
+
 // Display all drawings and atualizations on the screen
 void display(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
     
-    //ilumination();
+    ilumination();
 
 
     Point c = spider.getCephalo().c;
@@ -53,8 +88,14 @@ void display(){
     glViewport(0, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(c.x, 5.0+c.y,c.z,c.x,c.y,c.z, 1.0, 0.0, 0.0);
+	//drawSky();
 	drawGround();
 	spider.draw();
+
+	
+ 	
+
+
 	glPopMatrix();
 
     /*Tela direita de baixo De frente por Z*/
@@ -62,8 +103,11 @@ void display(){
     glViewport(WINDOW_WIDTH/2, 0, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(5.0+c.x,c.y,c.z,c.x,c.y,c.z, 0.0, 1.0, 0.0);
+	//drawSky();
 	drawGround();
     spider.draw();
+	//glFogf(GL_FOG_COLOR,( 0.5, 0.5, 0.5, 1.0));
+
     glPopMatrix();
 
     /* Tela esquerda de cima Na de lado por X */ 
@@ -71,6 +115,7 @@ void display(){
     glViewport(0, WINDOW_HEIGHT/2, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(c.x, c.y, 5.0+c.z, c.x, c.y, c.z, 0.0, 1.0, 0.0);
+	//drawSky();
 	drawGround();
     spider.draw();
     glPopMatrix();
@@ -80,6 +125,7 @@ void display(){
     glViewport(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH/2, WINDOW_HEIGHT/2);
     glLoadIdentity();
     gluLookAt(3.0+c.x, 2.0+c.y, 10.0+c.z, c.x, c.y, c.z, 1.0, 1.0, 1.0);
+	//drawSky();
 	drawGround();
     spider.draw();
     glPopMatrix();
@@ -133,10 +179,22 @@ void defaultInit(){
 	glLoadIdentity();	
 
 	glEnable(GL_DEPTH_TEST);
+	
 	//glEnable ( GL_TEXTURE_3D );
 	spider = Spider();
 	loadTexture2d("texture/ground.jpeg",&groundTex);
+	loadTextureCubeMap("texture/sky.jpg",&skyTex);
 
+	/////////////////////// DISTANCE FOGGING ///////////////////////
+	glEnable(GL_FOG);
+	glFogf(GL_FOG_MODE,GL_LINEAR);
+	float FogCol[4]={0.5, 0.5, 0.5, 1.0}; // Define a nice light grey
+	glFogfv(GL_FOG_COLOR,FogCol);
+
+	glFogf(GL_FOG_DENSITY, GL_EXP);
+	glFogf(GL_FOG_HINT,GL_NICEST);
+	glFogf(GL_FOG_START, 1.0f);
+ 	glFogf(GL_FOG_END, 200.f);
 
 
 }

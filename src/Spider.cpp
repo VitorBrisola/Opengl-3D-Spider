@@ -163,12 +163,18 @@ using namespace std;
    		// Levar centro ate a posicao atual para rotacionar
    		glTranslatef(cephalo.c.x, cephalo.c.y, cephalo.c.z);
    		glRotatef(angle,0.0f,1.0f,0.0f);
+		
    	
+	   	glRotatef(90.0f,0.0f,0.0f,1.0f);
+		glRotatef(90.0f,0.0f,1.0f,0.0f);
 		
 		glEnable ( GL_TEXTURE_3D );
 	    glBindTexture ( GL_TEXTURE_3D, cephaloTex);
 		gluSphere(cephaloQuad,cephalo.r,100,100);	
 	  	glDisable ( GL_TEXTURE_3D );
+
+		glRotatef(-90.0f,0.0f,1.0f,0.0f);
+		glRotatef(-90.0f,0.0f,0.0f,1.0f);	
 	
 
 		glColor3f(0,0,0);
@@ -176,23 +182,24 @@ using namespace std;
 		
 
 		glTranslatef(abdomen.c.x, abdomen.c.y, abdomen.c.z);
-   		
+		glRotatef(180.0f,1.0f,0.0f,0.0f);
+		glRotatef(90.0f,0.0f,1.0f,0.0f);
+
 		//glutSolidSphere(abdomen.r,100,100);
 		glEnable ( GL_TEXTURE_3D );
 		glBindTexture ( GL_TEXTURE_3D, abdomenTex);
 		gluSphere(abdomenQuad,abdomen.r,100,100);
 		glDisable ( GL_TEXTURE_3D );
-   		
+		
+		glRotatef(-90.0f,0.0f,1.0f,0.0f);
+		glRotatef(-180.0f,1.0f,0.0f,0.0f);	
 		glTranslatef((-1.0f)*abdomen.c.x, (-1.0f)*abdomen.c.y, (-1.0f)*abdomen.c.z);
 
+		
 		glRotatef((-1.0f)*angle,0.0f,1.0f,0.0f);
    		glTranslatef((-1.0f)*cephalo.c.x, (-1.0f)*cephalo.c.y, (-1.0f)*cephalo.c.z);
 		
-		// desenho do vetor direcao para testes
-		/*glBegin(GL_LINES);
-		glVertex3d(0.0f,0.0f,0.0f);
-		glVertex3d(direction.x,direction.y,direction.z);
-		glEnd();*/
+		
 		
 	}
 
